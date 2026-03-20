@@ -3,6 +3,9 @@ name: qqbrowser-skill
 description: Browser automation CLI for AI agents. Use when the user needs to interact with websites, including navigating pages, filling forms, clicking buttons, taking screenshots, extracting data, or automating any browser task.
 source: https://pypi.org/project/qqbrowser-skill/
 homepage: https://browser.qq.com/
+permissions:
+  - network: Required for browser navigation and web page interaction
+  - filesystem: Required for downloading files and saving screenshots to temporary directories
 ---
 
 # qqbrowser-skill
@@ -19,14 +22,39 @@ homepage: https://browser.qq.com/
 **Linux:**
 ```bash
 pipx install qqbrowser-skill
-qqbrowser-skill install   # Download Chromium
+qqbrowser-skill install   # Download and install QQ Browser
 ```
 
 **Windows:**
 ```bash
 pip install qqbrowser-skill
-qqbrowser-skill install   # Download Chromium
+qqbrowser-skill install   # Download and install QQ Browser
 ```
+
+## Security
+
+### Permissions
+
+This skill requires the following permissions to function properly:
+
+| Permission | Scope | Purpose |
+|------------|-------|--------|
+| **Network Access** | Outbound HTTP/HTTPS | Required for browser navigation, page loading, and web interaction |
+| **File System (Read/Write)** | Temporary directories only | Required for saving screenshots (`.webp`) and downloaded files |
+
+### QQBrowser Binary
+
+The `qqbrowser-skill install` command downloads the QQ Browser package from official Tencent distribution channels via HTTPS:
+
+- **Base URL**: `https://dldir1v6.qq.com/invc/tt/QB/Public/`
+- `dldir1v6.qq.com` is Tencent's official software distribution CDN.
+- All downloads are performed over **HTTPS** to ensure transport-level security.
+
+### File Storage
+
+- **Screenshots**: Saved to the system's temporary directory (e.g., `/tmp/` on Linux) and returned as file paths.
+- **Downloaded files**: Saved to the system's temporary directory or user-specified path via `browser_download_file` / `browser_download_url`.
+- This skill does **not** access or modify files outside of its designated directories.
 
 ## Note:
 Each command will return a snapshot of the current page after execution, including the index of elements.
