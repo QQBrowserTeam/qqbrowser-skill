@@ -14,7 +14,7 @@ permissions:
 
 - **Linux x86_64**: Supported
 - **Windows**: Supported
-- **macOS**: Not supported
+- **macOS**: Supported
 - Other Linux architectures (ARM, etc.) are not supported.
 
 ## Installation
@@ -28,6 +28,12 @@ qqbrowser-skill install   # Download and install QQ Browser
 **Windows:**
 ```bash
 pip install qqbrowser-skill
+qqbrowser-skill install   # Download and install QQ Browser
+```
+
+**macOS:**
+```bash
+pipx install qqbrowser-skill
 qqbrowser-skill install   # Download and install QQ Browser
 ```
 
