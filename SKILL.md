@@ -96,11 +96,11 @@ qqbrowser-skill browser_go_back                      # Go back
 qqbrowser-skill browser_wait --seconds 3             # Wait for page load (default 3s)
 
 # Snapshot & Screenshot
-qqbrowser-skill browser_snapshot                     # Get page content with element indices
+qqbrowser-skill browser_snapshot                     # Default mode: page content with element indices (for interaction)
+qqbrowser-skill browser_snapshot --markdown          # Markdown mode: clean Markdown of the page (for reading/extraction, no indices)
 qqbrowser-skill browser_screenshot                   # Take screenshot (returns temp file path of .webp image)
 qqbrowser-skill browser_screenshot --full            # Full-page screenshot (returns temp file path)
 qqbrowser-skill browser_screenshot --annotate        # Annotated screenshot with element labels (returns temp file path)
-qqbrowser-skill browser_markdownify                  # Convert page to markdown
 
 # Click & Input (use indices from snapshot)
 qqbrowser-skill browser_click_element --index 1      # Click element
@@ -171,6 +171,10 @@ qqbrowser-skill browser_dialog --action accept       # Accept dialog
 qqbrowser-skill browser_dialog --action dismiss      # Dismiss dialog
 qqbrowser-skill browser_dialog --action accept --text "input text"  # Accept prompt with text
 
+# JavaScript Evaluation
+qqbrowser-skill browser_eval_content_js --script "document.title"                    # Evaluate JS and return result
+qqbrowser-skill browser_eval_content_js --script "ZG9jdW1lbnQudGl0bGU=" --base64    # Evaluate base64-encoded JS script
+
 # Task Completion
 qqbrowser-skill browser_done --success --text "Task completed"      # Mark task as done
 qqbrowser-skill browser_done --text "Still in progress"              # Mark task as incomplete
@@ -201,11 +205,18 @@ qqbrowser-skill browser_snapshot  # Verify result
 
 ### Data Extraction
 
+Choose the right `browser_snapshot` mode based on intent:
+
+- **`browser_snapshot --markdown`** — preferred for **reading/summarizing** page content (articles, docs, search results, product pages). Returns clean Markdown with ads/nav/scripts stripped. Token-efficient, but contains **no element indices** — cannot be used to drive clicks or inputs.
+- **`browser_snapshot`** (default) — required for **interacting** with the page. Returns indexed elements for use with `browser_click_element`, `browser_input_text`, etc.
+
 ```bash
 qqbrowser-skill browser_go_to_url --url https://example.com/products
+qqbrowser-skill browser_snapshot --markdown                # Read the whole page as clean markdown
+
+# Use default snapshot + get_info when you need to interact or read a specific element
 qqbrowser-skill browser_snapshot
-qqbrowser-skill browser_get_info --type text --index 5    # Get specific element text
-qqbrowser-skill browser_markdownify                        # Get full page as markdown
+qqbrowser-skill browser_get_info --type text --index 5     # Get a specific element's text
 ```
 
 ### Infinite Scroll Pages
